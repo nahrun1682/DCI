@@ -435,6 +435,38 @@
     border-left: 2px solid var(--rule-hard);
     padding-left: 14px;
   }
+  /* ---------- terminal blocks ---------- */
+  .term { margin: 22px 0 26px; }
+  .term > .lbl {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 6px;
+  }
+  .term pre {
+    margin: 0;
+    border-left-color: var(--rule-hard);
+    background: var(--sunken);
+    font-size: 12.5px;
+    line-height: 1.75;
+  }
+  .term.hit pre { border-left-color: var(--accent); }
+  .term pre b { color: var(--accent); font-weight: 700; }
+  .term pre i { color: var(--muted); font-style: normal; }
+  .term pre u { text-decoration: none; color: var(--struct); }
+  .term .cap { font-size: 13px; color: var(--muted); margin-top: 9px; line-height: 1.7; }
+
+  .step {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin: 40px 0 -2px;
+    font-weight: 700;
+  }
+
   /* ---------- glossary ---------- */
   .gloss {
     background: var(--surface);
@@ -1295,6 +1327,16 @@
 </div>
 
 <p>キーワードは <strong>execution prior（実行の事前情報）</strong>。関連性を「厳格な証拠のボトルネック」ではなく「実行のヒント」として使う、という発想の転換だ。</p>
+
+<div class="lede">
+  <p><strong>先に結論だけ。</strong> RARG がやることは、煎じ詰めると3つしかない。</p>
+  <ul>
+    <li><code>grep</code> の<strong>検索対象と順番</strong>を、埋め込みの関連度順に固定する（＝ <span class="p p-rarg">RARG</span>）</li>
+    <li>最初の <code>grep</code> を組み立てるための<strong>取っ掛かりの段落</strong>を渡しておく（＝ <span class="p p-rarg">RARG+</span>）</li>
+    <li>大量に出たヒットを、<strong>一致した行そのもの</strong>の関連度で並べ替えてから見せる（＝ <span class="p p-rarg">RARG++</span>）</li>
+  </ul>
+  <p>以下 2.2〜2.5 でそれぞれの仕組みを見て、<strong><a href="#ex">2.6 で実際の1問を最後まで追う</a></strong>。仕組みが頭に入りにくければ、先に 2.6 を読んでも構わない。</p>
+</div>
 </div>
 
 <div class="wide">
@@ -1464,6 +1506,126 @@
   <span class="tag">誠実な考察</span>
   <p>生成クエリが負けた理由を、著者は <strong>train-test gap</strong> に帰している。明示的な再ランククエリを出力させると、<strong>学習時に身につけた Bash/rg の挙動が乱れる</strong>。ただし収束は最速（17.8ツール）なので、このギャップを埋めるのは今後の課題、としている。</p>
 </div>
+
+
+<h3 id="ex">2.6　具体例：1問を最後まで追う</h3>
+<p class="src"><span class="chip c-rarg">RARG 論文</span><span class="chip c-none">本資料</span> 軌跡の数値は論文のケーススタディの報告値。質問文と各コマンドの出力は、その挙動を再現した本資料側の再構成。</p>
+
+<p>ここまでの仕組みを、実際の1問で動かしてみる。</p>
+
+<blockquote>
+  <p>ある数学者を探している。2010年代に米国数学会（AMS）のフェローに選出され、博士号は 1983 年に取得。共著者に Y. Peres と R. Pemantle がいる。2本目の論文のタイトルは……</p>
+</blockquote>
+
+<p><strong>名前は一度も出てこない。</strong>散らばった手がかりを突き合わせないと特定できない、という BrowseComp-Plus の典型的な形。正解は <strong>Russell David Lyons</strong>。</p>
+
+<p class="step">① 素の DCI はこうなる</p>
+
+<div class="term">
+  <div class="lbl">DCI — 1ターン目</div>
+<pre><code>$ rg -n "American Mathematical Society" .</code></pre>
+  <p class="cap">コーパス 10万ファイルを頭から全走査する。ヒットは数千件。<code>rg</code> はパターンに一致した行を<strong>ファイルを見つけた順</strong>に吐き、出力は上限（DCI では 50KB）で打ち切られる。エージェントに届くのは——</p>
+</div>
+
+<div class="term">
+  <div class="lbl">エージェントが実際に見る出力</div>
+<pre><code>  1  doc_10223.txt:120: ...the <i>American Mathematical Society</i> announced   <i>← 学会の告知</i>
+  2  doc_00997.txt: 88: ...annual meeting of the <i>American Mathe...</i>        <i>← 別の告知</i>
+  3  doc_00307.txt:412: ...<i>(無関係)</i>
+        :
+ 30  doc_11884.txt: 55: ...<i>(無関係)</i>
+<b>──────────── ここで出力が切れる ────────────</b>
+        :
+<b>202  doc_00082.txt:216: ...Fellow of the AMS (2012), Ph.D. 1983...      ← 本命</b></code></pre>
+  <p class="cap"><strong>核心の一行は 202 番目にある。エージェントには届かない。</strong>だから別のパターンを試し、また全走査し……を繰り返す。DCI が 1問あたり <strong>99.1 回</strong>もツールを呼ぶのはこれが理由。</p>
+</div>
+
+<p class="step">② RARG は、まず走査順を決める</p>
+
+<div class="term">
+  <div class="lbl">RARG — 1ターン目</div>
+<pre><code>&gt; embed_recall("mathematician AMS fellow 1983 PhD coauthor Peres Pemantle")
+
+  <i>/tmp/scope_1.txt を作成 → クエリ: "mathematician AMS fellow ..."</i></code></pre>
+  <p class="cap"><strong>返ってきたのはこれだけ。文書の中身は1文字も返らない。</strong>作られたファイルの中身は、関連度順に並んだパスの一覧である。</p>
+</div>
+
+<div class="term">
+  <div class="lbl">/tmp/scope_1.txt</div>
+<pre><code><u>1.     doc_00082.txt</u>      <i>← 関連度 1位</i>
+2.     doc_04417.txt
+3.     doc_00214.txt
+        :
+10000. doc_25150.txt      <i>← ここまでで Gold の 95〜97% を捕捉</i></code></pre>
+</div>
+
+<p>そのうえで<strong>さっきと同じパターンで</strong> <code>grep</code> を打つ。変わるのは対象と順序だけ。</p>
+
+<div class="term hit">
+  <div class="lbl">RARG — 2ターン目</div>
+<pre><code>$ cat /tmp/scope_1.txt | xargs -d '\n' rg -j1 -n "American Mathematical Society"</code></pre>
+  <p class="cap"><code>cat … | xargs</code> で検索対象が<strong>スコープ1万件だけ</strong>になり（10万件の全走査ではない）、<code>-j1</code> で並列をやめて<strong><code>scope_1.txt</code> に書いた順に</strong>走査する。結果——</p>
+</div>
+
+<div class="term hit">
+  <div class="lbl">エージェントが実際に見る出力</div>
+<pre><code><b>  1  doc_00082.txt:216: ...Fellow of the AMS (2012), Ph.D. 1983...     ← 本命が1番目</b>
+  2  doc_04417.txt: 41: ...joint work with Peres and Pemantle...
+  3  doc_00214.txt: 12: ...<i>(関連はするが決め手ではない)</i>
+        :
+ 30  doc_03119.txt: 77: ...<i>(無関係)</i>
+<b>──────────── ここで出力が切れる ────────────</b></code></pre>
+  <p class="cap"><strong>同じパターン、同じコーパス、同じ切り詰め。変えたのは順番だけ。</strong>それで本命が可視領域に入る。これが「関連性を実行の事前情報として使う」の中身である。</p>
+</div>
+
+<p class="step">③ RARG+ が足すもの — 最初の一手を捨てない</p>
+
+<p>②の <code>embed_recall</code> の戻り値に、上位文書から取ったクエリ関連段落が10個くっついてくる。</p>
+
+<div class="term">
+  <div class="lbl">embed_recall の戻り値に追加される部分</div>
+<pre><code>&lt;qr_paragraph&gt;
+  ...was elected a <u>Fellow of the American Mathematical Society</u> in 2012,
+  following joint work with <u>Yuval Peres</u> and <u>Robin Pemantle</u> on random walks...
+&lt;/qr_paragraph&gt;</code></pre>
+  <p class="cap">エージェントはこれを読んでから動けるので、<strong>最初の <code>grep</code> をいきなり <code>"Pemantle"</code> で打てる</strong>。「とりあえず AMS で探ってみるか」という無駄な一手が消える。実際、論文のケーススタディでは<strong>答えを含む CV の初出が、RARG では7ターン目、初期化ありでは2ターン目</strong>になっている。</p>
+</div>
+
+<p class="step">④ RARG++ が足すもの — 順位の低い文書の一行を救う</p>
+
+<p>②で本命が1位に来たのは、<strong>本命の文書がたまたま関連度1位だったから</strong>である。現実にはこうならないことがある。</p>
+
+<div class="term">
+  <div class="lbl">文書順だけだと起きること</div>
+<pre><code>関連度    1位  doc_00311.txt  長い伝記記事
+              → "American Mathematical Society" に <b>10件ヒット</b>、全部ただの言及
+関連度 4000位  doc_00082.txt  短い CV
+              → ヒットは <b>1件だけ</b>。しかしそれが「Fellow of the AMS (2012)」</code></pre>
+  <p class="cap">文書レベルの順序だけで並べると、上位文書の無関係なヒットが枠を食い尽くし、<strong>4,000位の決定的な一行は切り詰めで消える</strong>。</p>
+</div>
+
+<p>RARG++ は <code>rg</code> のヒットを 500 件プールしたうえで、<strong>一致した行そのもの</strong>を埋め込みで並べ替えてから上位30件を出す。だから 4,000 位の文書の一行が先頭に浮上できる。</p>
+
+<div class="note">
+  <span class="tag">3.4 の分析とつながる</span>
+  <p>これが「3変種の中で <span class="p p-rarg">RARG++</span> のヒット分布が最も平坦（＝下位ランクからも回収している）」の正体。<strong>大域の関連性が走査順を決め、局所の関連性が可視性を決める</strong>という2段構えが、この一例に両方出ている。</p>
+</div>
+
+<p class="step">⑤ 3変種を並べると</p>
+
+<div class="tablewrap">
+  <table>
+    <caption><span class="chip c-rarg">RARG 論文</span>ケーススタディ — 同一問題での軌跡</caption>
+    <thead><tr><th>手法</th><th class="n">ツール呼び出し</th><th class="n">ターン</th><th>答えを含む CV の初出</th><th>結果</th></tr></thead>
+    <tbody>
+      <tr><td><span class="p p-rarg">RARG</span></td><td class="n">33</td><td class="n">17</td><td>7ターン目</td><td>正解</td></tr>
+      <tr><td><span class="p p-rarg">RARG+</span></td><td class="n">18</td><td class="n">11</td><td>2ターン目</td><td>正解</td></tr>
+      <tr class="hi"><td><span class="p p-rarg">RARG++</span></td><td class="n"><span class="win">10</span></td><td class="n"><span class="win">10</span></td><td>2ターン目</td><td>正解</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>3つとも同じ答え（Russell David Lyons）にたどり着いている。<strong>変わったのは正解したかどうかではなく、そこに至る手数である。</strong>粗い関連性（走査順）→ 出発点の付与 → 細かい関連性（一致行の可視性）と足すたびに、収束が速くなっていく。</p>
 
 
 <!-- ============ PART III ============ -->
