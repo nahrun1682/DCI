@@ -281,6 +281,8 @@
     color: var(--ink);
   }
   blockquote p { margin: 10px 0; }
+  blockquote ul { margin: 10px 0; font-size: 16px; }
+  blockquote li { margin: 4px 0; }
   blockquote strong { font-weight: 700; }
 
   .note {
@@ -433,6 +435,48 @@
     border-left: 2px solid var(--rule-hard);
     padding-left: 14px;
   }
+  /* ---------- glossary ---------- */
+  .gloss {
+    background: var(--surface);
+    border: 1px solid var(--rule-hard);
+    padding: 26px 30px 30px;
+    margin: 42px 0;
+  }
+  .gloss > .hd {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .gloss h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 26px 0 10px;
+  }
+  .gloss dl { margin: 0; }
+  .gloss dt {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-top: 14px;
+  }
+  .gloss dd {
+    margin: 3px 0 0;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--ink-soft);
+    padding-left: 0;
+  }
+  .gloss dt:first-of-type { margin-top: 0; }
+
   /* ---------- paper colour coding ---------- */
 
   .p {
@@ -677,6 +721,7 @@
   <h4>目次</h4>
   <ol>
     <li><a href="#part1"><span class="n">I</span><span>ここに至るまでの流れ — DCI / RISE / DR-DCI</span></a></li>
+    <li><a href="#gloss"><span class="n">用語</span><span>ベンチマーク・評価指標・登場する手法</span></a></li>
     <li><a href="#part2"><span class="n">II</span><span>RARG 本体 — 二つの解像度の関連性</span></a></li>
     <li><a href="#part3"><span class="n">III</span><span>実験結果</span></a></li>
     <li><a href="#part4"><span class="n">IV</span><span>評価 — 良いところと突っ込みどころ</span></a></li>
@@ -836,6 +881,51 @@
 
 <div class="wrap">
 
+
+<div class="gloss" id="gloss">
+  <div class="hd">読む前に — この資料に出てくるベンチマーク・指標・手法</div>
+
+  <h4>ベンチマーク</h4>
+  <dl>
+    <dt>BrowseComp-Plus（本文では BC+ とも）</dt>
+    <dd>ブラウジング型の難問 QA。不透明なライブ Web 検索を<strong>固定コーパス（10万文書）</strong>に置き換えることで、検索手法どうしを比較できるようにしたもの。各質問には根拠となる <strong>Gold 文書（通常 1〜4 件）</strong>と、大量のディストラクタ（無関係な妨害文書）が付く。全 830 問だが、<span class="p p-rise">RISE</span> 以降は費用の都合で<strong>固定の 100 問サブセット</strong>で評価するのが慣例になっている。採点は LLM-as-a-judge（<code>gpt-5.1</code>）。コーパス規模の実験では、質問と Gold 文書を固定したまま、<strong>FineWeb / FineWeb-Edu</strong>（大規模な Web テキスト集合）から抽出した文書をディストラクタとして注ぎ足して水増しする。</dd>
+    <dt>BRIGHT</dt>
+    <dd>表層的な語彙・意味の一致では解けない、<strong>推論を要する検索</strong>のベンチマーク。本資料では Biology / Earth Science / Economics / Robotics の4サブセット（各コーパス 5〜12万文書、質問は各 100 問前後）。返すのは単一の答えではなく<strong>ランク付きリスト</strong>なので、QA とは求められる挙動が違う。</dd>
+    <dt>Wiki-18</dt>
+    <dd>2018年版 Wikipedia ダンプを使うマルチホップ QA 群（NQ / TriviaQA / Bamboogle / HotpotQA / 2Wiki / MuSiQue）。<span class="p p-drdci">DR-DCI</span> はこれを 2,000万個の独立ファイルとして並べ、「1ファイル1文書」の極端な設定で評価した。</dd>
+  </dl>
+
+  <h4>評価指標</h4>
+  <dl>
+    <dt>Coverage（カバレッジ）</dt>
+    <dd>探索の軌跡が <strong>Gold 文書にそもそも到達できたか</strong>。<code>mean</code> は Gold 文書全体に対する平均で、実質リコールにあたる。<strong>広さの指標。</strong></dd>
+    <dt>Localization（局在化）</dt>
+    <dd>到達した Gold 文書の中で、<strong>どれだけ小さく実用的な範囲まで絞り込めたか</strong>。抽出したスパンが文書全体に対して短いほど高い。<strong>深さの指標。</strong></dd>
+    <dt>scope recall / RG カバレッジ</dt>
+    <dd>いずれも <span class="p p-rarg">RARG</span> の分析用。前者は検索が作ったスコープ（上位1万パス）が Gold 文書を捉えている割合、後者はそのうち <code>rg</code> が実際にヒットしたファイルで回収できた割合。<strong>2つを分けて見ることで、劣化が検索器側か <code>rg</code> 側かを切り分けられる。</strong></dd>
+    <dt>nDCG@10</dt>
+    <dd>上位10件の順位品質。ランキングタスク（BRIGHT）の評価に使う。</dd>
+  </dl>
+
+  <h4>登場する手法・モデル</h4>
+  <dl>
+    <dt>DCI-Agent-Lite</dt>
+    <dd><span class="p p-dci">DCI</span> 論文が用意した<strong>最小ハーネス</strong>。<code>bash</code> と <code>read</code> だけを公開し、長い探索でコンテキストが溢れないよう「切り詰め／圧縮／要約」を段階的に効かせる管理レベル L0〜L4 を持つ（L3 が既定）。<span class="p p-rarg">RARG</span> はこれを土台にしているので、比較が公平になる。</dd>
+    <dt>RISE-BM25</dt>
+    <dd><span class="p p-rise">RISE</span> から目次（TOC）加工を取り除いた、<strong>「境界」だけのアブレーション</strong>。RISE の2つの主張のどちらが効いているかを分離するためのもの。</dd>
+    <dt>RISE-Q3-Emb-4B</dt>
+    <dd>RISE の BM25 を密検索器に差し替えた、<span class="p p-rarg">RARG</span> 側が用意した対照実験。「検索器を強くすれば RISE も良くなるのでは」への回答。</dd>
+    <dt>Retrieval Agent / Embedding Agent</dt>
+    <dd>前者は RISE と一緒に公開された従来型の top-k 検索エージェント、後者は密検索で候補文書を取ってその中身を読ませるエージェント。どちらも<strong>「関連性をコンテンツとして見せる」側の代表</strong>。</dd>
+    <dt>NeMo Agent</dt>
+    <dd>候補を反復的に recall して LLM で並べ替える、NVIDIA の検索特化エージェント。重複除去を持つぶん<strong>多様な文書に届く</strong>ので、「カバレッジを増やせば勝てるのか」を検証する対照として置かれている。</dd>
+    <dt>Q3E / NV</dt>
+    <dd><span class="p p-rarg">RARG</span> が使う埋め込みモデルの略。<strong>Q3E = Qwen3-Embedding-4B</strong>、<strong>NV = llama-nv-embed-reasoning-3b</strong>（推論集約型で、BRIGHT 最強の NeMo が使うもの）。BC+ は全工程 Q3E、BRIGHT は文書ランキングに NV・マッチ再ランクに Q3E を使う。</dd>
+    <dt>バックボーン LLM</dt>
+    <dd><code>GPT-5.4</code> / <code>-mini</code> / <code>-nano</code>、および <code>mimo-v2.5-pro</code>。同じ手法でもモデル階層で順位が変わるため、複数階層で比較されている。</dd>
+  </dl>
+</div>
+
 <div class="card k-dci">
   <div class="id"><span class="name">DCI</span><span>arXiv:2605.05242</span><span>2026-05</span><span>TAMU / Waterloo / Stanford ほか</span></div>
   <h3>1.2　契約を壊した論文</h3>
@@ -867,7 +957,7 @@
     </table>
   </div>
 
-  <p><strong>Gold 文書の回収率では埋め込み検索に倍近い差で負けている。</strong>それでも精度は +28pt。</p>
+  <p><strong>Gold 文書の回収率では埋め込み検索に倍近い差で負けている。</strong>それでも精度は +28pt。（<span class="p p-dci">DCI-Agent-Lite</span> は DCI 論文の最小ハーネス。<code>bash</code> と <code>read</code> しか持たない。）</p>
 
   <p>理由：BrowseComp-Plus の質問の Gold 文書は通常 1〜4 件しかない。<em>1 本引き当てさえすれば</em>、そこから正確なスパンを検証し、新しいエンティティを抜き出し、それを次の <code>grep</code> の材料にできる。DCI は「網羅的な証拠回収」を捨てて「<strong>高解像度の局所的な前進</strong>」を買っている。</p>
 
@@ -1167,8 +1257,10 @@
 
 <blockquote>
   <p>どちらも、関連性は<strong>「探索可能な空間を構築・拡張する」ためにしか使われていない</strong>。一度インタラクションが始まってしまえば、関連性は</p>
-  <p>・<code>grep</code> が<strong>どの文書から</strong>走査すべきかを指示しない<br>
-  ・大量にヒットした中で、<strong>どの抜粋がモデルに届くか</strong>を指示しない</p>
+  <ul>
+    <li><code>grep</code> が<strong>どの文書から</strong>走査すべきかを指示しない</li>
+    <li>大量にヒットした中で、<strong>どの抜粋がモデルに届くか</strong>を指示しない</li>
+  </ul>
 </blockquote>
 
 <p><code>rg</code> はパターンに一致するだけで、<em>すべてのファイルが同等に有望であるかのように</em>コーパスを舐める。ヒットは出力の切り詰めで消える。関連性という事前情報を持っているのに、<strong>探索の実行段階では捨てている</strong>。</p>
@@ -1482,6 +1574,8 @@ nano : RARG 73 → RARG+ 74 → RARG++ 79</code></pre>
 </div>
 
 <div class="wrap">
+
+<p class="src"><span class="chip c-rarg">RARG 論文</span> 右端の Tools 列は<strong>手法間で比較してはいけない</strong>。NeMo は1回の検索で全文文書を20件取る recall-and-rank 型で、BRIGHT の文書は短いためループが極端に短くなる（7.68）。一方 grep 系は局所的な一致しか見えないので、周辺文脈を読む <code>Read</code> の分だけ回数が増える。</p>
 
 <p><strong>QA では RARG++ &gt; RARG+ &gt; RARG だったのが、ここでは RARG+ &gt; RARG &gt; RARG++ と反転する。</strong>著者の説明が明快だ。</p>
 
