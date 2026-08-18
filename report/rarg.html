@@ -523,7 +523,7 @@
   /* legend */
   .legend {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1px;
     background: var(--rule);
     border: 1px solid var(--rule);
@@ -659,6 +659,7 @@
   }
 
   @media (max-width: 620px) {
+    .legend { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     body { font-size: 15.5px; padding: 0 16px 80px; }
     header.masthead { padding-top: 46px; }
     .card { padding: 22px 20px 24px; }
