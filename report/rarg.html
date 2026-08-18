@@ -1580,20 +1580,64 @@
 
 <p class="step">③ RARG+ が足すもの — 最初の一手を捨てない</p>
 
-<p>②の <code>embed_recall</code> の戻り値に、上位文書から取ったクエリ関連段落が10個くっついてくる。</p>
+<h4>何に困っているのか</h4>
+
+<p>②で走査<strong>順</strong>は直った。しかし<strong>打つパターンそのもの</strong>は、まだ質問文から推測するしかない。ここに <code>grep</code> 特有の落とし穴がある。</p>
+
+<p><strong><code>grep</code> はリテラル一致である。</strong>質問文の言い回しと、コーパス側の書き方が一致している保証はどこにもない。</p>
 
 <div class="term">
+  <div class="lbl">RARG（初期化なし）— 質問文の語をそのまま投げるとこうなる</div>
+<pre><code>$ cat /tmp/scope_1.txt | xargs -d '\n' rg -j1 "AMS Fellow"
+  <i>→ ほぼ当たらない。コーパスは「Fellow of the American Mathematical Society」と書いている</i>
+
+$ cat /tmp/scope_1.txt | xargs -d '\n' rg -j1 "R. Pemantle"
+  <i>→ 参考文献欄ばかり当たる。本文の表記は「Robin Pemantle」</i></code></pre>
+  <p class="cap">エージェントは<strong>コーパスがどう書いているかを知らないまま</strong>パターンを投げている。走査順が正しくても、パターンが当たらなければ前に進まない。素の RARG がこの問題で<strong>7ターン目まで答えの文書に届かなかった</strong>のがこれである。</p>
+</div>
+
+<h4>どう作るか</h4>
+
+<p>解決策は素朴で、<strong>「コーパスの実物を少しだけ先に見せる」</strong>。ただし追加の LLM ターンは使わない。<code>embed_recall</code> の応答に相乗りさせる。</p>
+
+<ol>
+  <li>スコープ上位の文書を <strong>400〜1000 文字の段落</strong>に切る</li>
+  <li>各段落を埋め込みでエンコードし、<strong>スコープクエリに対してスコアリング</strong></li>
+  <li>上位 <strong>10 段落</strong>だけ残す</li>
+  <li><code>&lt;qr_paragraph&gt;</code> で囲み、<code>embed_recall</code> の戻り値の末尾に付ける</li>
+</ol>
+
+<div class="term hit">
   <div class="lbl">embed_recall の戻り値に追加される部分</div>
 <pre><code>&lt;qr_paragraph&gt;
   ...was elected a <u>Fellow of the American Mathematical Society</u> in 2012,
   following joint work with <u>Yuval Peres</u> and <u>Robin Pemantle</u> on random walks...
 &lt;/qr_paragraph&gt;</code></pre>
-  <p class="cap">エージェントはこれを読んでから動けるので、<strong>最初の <code>grep</code> をいきなり <code>"Pemantle"</code> で打てる</strong>。「とりあえず AMS で探ってみるか」という無駄な一手が消える。実際、論文のケーススタディでは<strong>答えを含む CV の初出が、RARG では7ターン目、初期化ありでは2ターン目</strong>になっている。</p>
+  <p class="cap">これで<strong>コーパスが実際にどう書いているか</strong>が分かる。エージェントは表記をそのまま写して撃てる。</p>
+</div>
+
+<div class="term hit">
+  <div class="lbl">RARG+ — 1ターン目からこう打てる</div>
+<pre><code>$ cat /tmp/scope_1.txt | xargs -d '\n' rg -j1 "<b>Robin Pemantle</b>"
+  <i>→ 共著者チェーンに直行</i></code></pre>
+  <p class="cap">「とりあえず AMS で探ってみるか」という<strong>探りの一手が丸ごと消える</strong>。論文のケーススタディでは、<strong>答えを含む CV の初出が 7ターン目 → 2ターン目</strong>、ツール呼び出しが <strong>33 → 18 回</strong>に落ちている。</p>
+</div>
+
+<div class="note">
+  <span class="tag">当然出る疑問 — 主張と矛盾しないのか</span>
+  <p>「関連性をコンテンツとして見せるな」が RARG の主張なのに、ここでは<strong>文書の中身を見せている</strong>。矛盾に見えるが、設計は3点で一貫している。</p>
+  <ul>
+    <li><strong>量</strong> — 10 段落だけ。top-k 検索のように候補を丸ごと流し込むのとは桁が違う</li>
+    <li><strong>役割</strong> — <strong>答えの根拠ではなく、次の <code>grep</code> を組み立てるための材料</strong>。事実の確認はあくまで本文を <code>read</code> して行う</li>
+    <li><strong>寿命</strong> — <strong>コンテキスト圧縮時にクリアされる</strong>。証拠として蓄積されない。だから「証拠チャネル」にはならない</li>
+  </ul>
 </div>
 
 <p class="step">④ RARG++ が足すもの — 順位の低い文書の一行を救う</p>
 
-<p>②で本命が1位に来たのは、<strong>本命の文書がたまたま関連度1位だったから</strong>である。現実にはこうならないことがある。</p>
+<h4>何に困っているのか</h4>
+
+<p>②で本命が1位に来たのは、<strong>本命の文書がたまたま関連度1位だったから</strong>である。現実にはこうならない。</p>
 
 <div class="term">
   <div class="lbl">文書順だけだと起きること</div>
@@ -1601,14 +1645,68 @@
               → "American Mathematical Society" に <b>10件ヒット</b>、全部ただの言及
 関連度 4000位  doc_00082.txt  短い CV
               → ヒットは <b>1件だけ</b>。しかしそれが「Fellow of the AMS (2012)」</code></pre>
-  <p class="cap">文書レベルの順序だけで並べると、上位文書の無関係なヒットが枠を食い尽くし、<strong>4,000位の決定的な一行は切り詰めで消える</strong>。</p>
+  <p class="cap">文書レベルの順序で並べると、<strong>上位文書の凡庸なヒットが表示枠を食い尽くす</strong>。長い文書ほどヒット数が多いので、これは構造的に起きる。</p>
 </div>
 
-<p>RARG++ は <code>rg</code> のヒットを 500 件プールしたうえで、<strong>一致した行そのもの</strong>を埋め込みで並べ替えてから上位30件を出す。だから 4,000 位の文書の一行が先頭に浮上できる。</p>
+<h4>着眼点：<code>rg</code> の出力は「文書」ではなく「行」の列である</h4>
+
+<div class="term">
+  <div class="lbl">rg が吐く1件の単位</div>
+<pre><code>doc_00311.txt:1042: ...presented at the American Mathematical Society meeting...
+<i>└── パス ──┘└行番号┘└──── 一致行とその周辺（最大1,000文字） ────┘</i></code></pre>
+  <p class="cap">1件ずつが<strong>独立した短い断片</strong>である。ということは、<strong>文書のスコアとは無関係に、断片そのものを評価して並べ替えられる</strong>。これが RARG++ の着眼点。</p>
+</div>
+
+<p>具体的には、<code>rg</code> のヒットを最大 <strong>M = 500 件</strong>プールし、断片を埋め込みでスコアリングして<strong>上位 m 件（BC+ は30、BRIGHT は60）</strong>だけを提示する。ヒットが m 件に満たなければ再ランクはスキップされる。</p>
+
+<h4>肝は「再ランク用のクエリをどう作るか」</h4>
+
+<p>ここが一番わかりにくいところ。断片を並べ替えるには基準となるクエリが要るが、<strong>手元にある2つのどちらか片方では足りない</strong>。</p>
+
+<div class="tablewrap">
+  <table>
+    <caption><span class="chip c-none">本資料</span>片方だけでは足りない理由</caption>
+    <thead><tr><th>使うもの</th><th>捉えているもの</th><th>それだけだと</th></tr></thead>
+    <tbody>
+      <tr><td>スコープクエリ</td><td class="wrap-ok"><strong>大域の目標</strong><br><small>「1983年博士・Peres/Pemantle 共著の AMS フェロー」</small></td><td class="wrap-ok">いま何を探して <code>grep</code> を打ったのかが反映されない</td></tr>
+      <tr><td><code>rg</code> のパターン</td><td class="wrap-ok"><strong>局所の意図</strong><br><small>「American Mathematical Society」</small></td><td class="wrap-ok">その語を含む行なら何でも上位に来る。元の目的を見失う</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>だから<strong>両方を機械的に連結する</strong>。これが「構築クエリ」。</p>
+
+<div class="term hit">
+  <div class="lbl">再ランククエリ（構築クエリ）</div>
+<pre><code>Instruct: ...
+Query: <u>mathematician AMS fellow 1983 PhD coauthor Peres Pemantle</u>   <i>← 大域（スコープクエリ）</i>
+RG focus: <u>American Mathematical Society</u>                            <i>← 局所（rg パターン由来）</i></code></pre>
+  <p class="cap"><code>rg</code> のパターンはルールに従ってキーワード列に変換され、スコープクエリの後ろに連結される。<strong>LLM は一切介在しない。</strong></p>
+</div>
+
+<h4>結果として何が起きるか</h4>
+
+<div class="term">
+  <div class="lbl">再ランク前 — 文書順（500件）</div>
+<pre><code>  1-10  doc_00311.txt  <i>関連度1位の伝記から、凡庸な言及が10件。枠を独占</i>
+        :
+  417   doc_00082.txt:216: ...Fellow of the AMS (2012), Ph.D. 1983...
+        :
+<b>──────── 上位30件で切ると 417番は消える ────────</b></code></pre>
+</div>
+
+<div class="term hit">
+  <div class="lbl">再ランク後 — 一致行の関連度順（上位30件）</div>
+<pre><code><b>  1  doc_00082.txt:216: ...Fellow of the AMS (2012), Ph.D. 1983...   ← 417位から浮上</b>
+  2  doc_00311.txt:1042: ...<i>(伝記の言及。1件だけ残る)</i>
+  3  doc_04417.txt: 41: ...joint work with Peres and Pemantle...</code></pre>
+  <p class="cap"><strong>関連度4,000位の文書の一行が、先頭に来る。</strong>文書スコアでは絶対に届かない位置にある証拠を、断片単位の評価で拾い上げている。</p>
+</div>
 
 <div class="note">
   <span class="tag">3.4 の分析とつながる</span>
-  <p>これが「3変種の中で <span class="p p-rarg">RARG++</span> のヒット分布が最も平坦（＝下位ランクからも回収している）」の正体。<strong>大域の関連性が走査順を決め、局所の関連性が可視性を決める</strong>という2段構えが、この一例に両方出ている。</p>
+  <p>これが「3変種の中で <span class="p p-rarg">RARG++</span> のヒット分布が最も平坦（＝下位ランクからも回収している）」の正体である。<strong>大域の関連性が走査順を決め、局所の関連性が可視性を決める</strong>という2段構えが、この一例に両方出ている。</p>
+  <p>逆に言うと、<strong>この「絞り込み」が裏目に出る場面もある</strong>。幅広く候補を集めることが求められるランキングタスク（BRIGHT）では、RARG++ は3変種で最下位になる。詳しくは 3.3 を参照。</p>
 </div>
 
 <p class="step">⑤ 3変種を並べると</p>
