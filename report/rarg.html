@@ -1636,6 +1636,27 @@
 
 <h3>3.1　主結果：BrowseComp-Plus 10万文書・100クエリ</h3>
 <p class="src"><span class="chip c-rarg">RARG 論文</span> Part III の数値はすべて RARG 論文の報告値。他手法の値も RARG 側の再実験または引用</p>
+
+<div class="tablewrap">
+  <table>
+    <caption><span class="chip c-none">本資料</span>表1・表3の列の読み方</caption>
+    <thead><tr><th>列</th><th>何を数えているか</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Acc ↑</strong></td><td class="wrap-ok">正解率（%）。BrowseComp-Plus 100問を LLM-as-a-judge（<code>gpt-5.1</code>）が採点したもの。<strong>↑ は高いほど良い、↓ は低いほど良い</strong>という意味。</td></tr>
+      <tr><td><strong>Turns ↓</strong></td><td class="wrap-ok"><strong>エージェントが LLM を呼んだ回数</strong>。1ターンの中で複数のツールをまとめて呼べるので、Tools より小さくなる。</td></tr>
+      <tr><td><strong>Tools ↓</strong></td><td class="wrap-ok"><strong>ツール呼び出しの総数</strong>。おおむね右の3列（Search + Bash + Read）の合計にあたる。コストとレイテンシに直結するので、実質的な効率の指標。</td></tr>
+      <tr class="hi"><td><strong>Search</strong></td><td class="wrap-ok"><strong>検索ツールを呼んだ回数。ただし何が返るかは手法ごとに違う</strong>——<span class="p p-rarg">RARG</span> は <code>embed_recall</code>（<strong>パス一覧だけ</strong>が返り、中身は返らない）、<span class="p p-rise">RISE</span> は <code>search</code>（文書をワークスペースに取り込みつつ<strong>上位10件のスニペットも返す</strong>）、Embedding / Retrieval Agent は密検索（<strong>文書の中身がそのまま返る</strong>）。<code>–</code> はその手法に検索ツールが存在しないこと（<span class="p p-dci">DCI</span>）。</td></tr>
+      <tr><td><strong>Bash</strong></td><td class="wrap-ok">シェルコマンドを実行した回数。中身はほぼ <code>rg</code> / <code>grep</code> による本文の探索。<code>–</code> はシェルを持たない手法。</td></tr>
+      <tr><td><strong>Read</strong></td><td class="wrap-ok">ファイルを読んだ回数。<code>grep</code> で当たった行の<strong>周辺を確認する</strong>ために使う。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="note">
+  <span class="tag">この表の肝</span>
+  <p><strong>Search の数字は「何回検索したか」ではなく「検索にどれだけ依存しているか」として読む。</strong>返るものが手法ごとに違うので、回数そのものは横並びで比較できない。<span class="p p-rise">RISE</span> の 13.1 回は「検索が情報チャネルとして働いていて、呼ぶほど中身が得られる」ことを、<span class="p p-rarg">RARG</span> の 1.2 回は「最初に走査順を決めるだけで、あとはシェルに委譲している」ことを表している。<strong>この対比が RARG の主張そのもの</strong>で、詳しくは下の読みどころ (b) を参照。</p>
+</div>
+
 </div>
 
 <div class="wide">
