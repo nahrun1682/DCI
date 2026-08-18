@@ -15,6 +15,12 @@
     --struct:   #2C7357;
     --struct-w: rgba(44, 115, 87, 0.10);
 
+    --p-dci:    #1D6C7C;  --p-dci-w:   rgba(29, 108, 124, 0.10);
+    --p-rise:   #2C7357;  --p-rise-w:  rgba(44, 115, 87, 0.10);
+    --p-drdci:  #8A5714;  --p-drdci-w: rgba(138, 87, 20, 0.10);
+    --p-rarg:   #B81F52;  --p-rarg-w:  rgba(184, 31, 82, 0.09);
+    --p-none:   #5F6970;  --p-none-w:  rgba(95, 105, 112, 0.08);
+
     --serif: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", "Songti SC", "Source Han Serif", serif;
     --sans: "Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", "Noto Sans JP", system-ui, -apple-system, "Segoe UI", sans-serif;
     --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
@@ -35,6 +41,12 @@
       --accent-w: rgba(255, 122, 159, 0.13);
       --struct:   #5BBF95;
       --struct-w: rgba(91, 191, 149, 0.13);
+
+      --p-dci:    #5CBED0;  --p-dci-w:   rgba(92, 190, 208, 0.13);
+      --p-rise:   #5BBF95;  --p-rise-w:  rgba(91, 191, 149, 0.13);
+      --p-drdci:  #DBA75E;  --p-drdci-w: rgba(219, 167, 94, 0.13);
+      --p-rarg:   #FF7A9F;  --p-rarg-w:  rgba(255, 122, 159, 0.13);
+      --p-none:   #95A0A5;  --p-none-w:  rgba(149, 160, 165, 0.10);
     }
   }
 
@@ -52,6 +64,12 @@
     --accent-w: rgba(255, 122, 159, 0.13);
     --struct:   #5BBF95;
     --struct-w: rgba(91, 191, 149, 0.13);
+
+    --p-dci:    #5CBED0;  --p-dci-w:   rgba(92, 190, 208, 0.13);
+    --p-rise:   #5BBF95;  --p-rise-w:  rgba(91, 191, 149, 0.13);
+    --p-drdci:  #DBA75E;  --p-drdci-w: rgba(219, 167, 94, 0.13);
+    --p-rarg:   #FF7A9F;  --p-rarg-w:  rgba(255, 122, 159, 0.13);
+    --p-none:   #95A0A5;  --p-none-w:  rgba(149, 160, 165, 0.10);
   }
 
   * { box-sizing: border-box; }
@@ -415,6 +433,94 @@
     border-left: 2px solid var(--rule-hard);
     padding-left: 14px;
   }
+  /* ---------- paper colour coding ---------- */
+
+  .p {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.88em;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .p-dci   { color: var(--p-dci); }
+  .p-rise  { color: var(--p-rise); }
+  .p-drdci { color: var(--p-drdci); }
+  .p-rarg  { color: var(--p-rarg); }
+
+  .src {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin: 10px 0 18px;
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .chip {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    padding: 2px 8px 3px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .chip.c-dci   { color: var(--p-dci);   background: var(--p-dci-w); }
+  .chip.c-rise  { color: var(--p-rise);  background: var(--p-rise-w); }
+  .chip.c-drdci { color: var(--p-drdci); background: var(--p-drdci-w); }
+  .chip.c-rarg  { color: var(--p-rarg);  background: var(--p-rarg-w); }
+  .chip.c-none  { color: var(--p-none);  background: var(--p-none-w); }
+
+  caption .chip { margin-right: 8px; vertical-align: 1px; }
+
+  /* legend */
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 40px 0 8px;
+  }
+  .legend .item { background: var(--surface); padding: 0 20px 18px; border-top: 3px solid var(--c); }
+  .legend .item.l-dci   { --c: var(--p-dci); }
+  .legend .item.l-rise  { --c: var(--p-rise); }
+  .legend .item.l-drdci { --c: var(--p-drdci); }
+  .legend .item.l-rarg  { --c: var(--p-rarg); }
+  .legend .nm {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 13.5px;
+    letter-spacing: 0.04em;
+    color: var(--c);
+    margin: 15px 0 2px;
+  }
+  .legend .dt { font-family: var(--mono); font-size: 10.5px; color: var(--faint); letter-spacing: 0.06em; }
+  .legend .ds { font-size: 12.5px; line-height: 1.72; color: var(--ink-soft); margin-top: 9px; }
+  .legend-note { font-size: 12.5px; color: var(--muted); margin: 12px 0 44px; }
+
+  /* card accents */
+  .card.k-dci   { border-left: 3px solid var(--p-dci); }
+  .card.k-rise  { border-left: 3px solid var(--p-rise); }
+  .card.k-drdci { border-left: 3px solid var(--p-drdci); }
+  .card.k-dci   > .id .name { color: var(--p-dci); }
+  .card.k-rise  > .id .name { color: var(--p-rise); }
+  .card.k-drdci > .id .name { color: var(--p-drdci); }
+
+  /* svg paper colours */
+  figure svg .f-dci   { fill: var(--p-dci); }
+  figure svg .s-dci   { stroke: var(--p-dci); }
+  figure svg .w-dci   { fill: var(--p-dci-w); }
+  figure svg .f-rise  { fill: var(--p-rise); }
+  figure svg .s-rise  { stroke: var(--p-rise); }
+  figure svg .w-rise  { fill: var(--p-rise-w); }
+  figure svg .f-drdci { fill: var(--p-drdci); }
+  figure svg .s-drdci { stroke: var(--p-drdci); }
+  figure svg .w-drdci { fill: var(--p-drdci-w); }
+
   /* svg semantic colors (presentation attrs don't accept var()) */
   figure svg .fa  { fill: var(--accent); }
   figure svg .sa  { stroke: var(--accent); }
@@ -543,6 +649,30 @@
   <div class="stat"><div class="v">1.2</div><div class="k">検索ツールの呼び出し回数<br>（RISE は 13.1 回）</div></div>
 </div>
 
+<div class="legend">
+  <div class="item l-dci">
+    <div class="nm">DCI</div>
+    <div class="dt">2026-05 · arXiv:2605.05242</div>
+    <div class="ds">検索器を捨て、<code>grep</code> で生コーパスを直接叩く。この系譜の起点。</div>
+  </div>
+  <div class="item l-rise">
+    <div class="nm">RISE</div>
+    <div class="dt">2026-06 · arXiv:2606.06880</div>
+    <div class="ds">BM25 で候補集合に<strong>境界</strong>を引き、その中の文書に目次を挿しておく。</div>
+  </div>
+  <div class="item l-drdci">
+    <div class="nm">DR-DCI</div>
+    <div class="dt">2026-06 · arXiv:2606.14885</div>
+    <div class="ds">境界を <code>pull</code> で<strong>動的に育てる</strong>。DCI と同じ著者陣による続編。</div>
+  </div>
+  <div class="item l-rarg">
+    <div class="nm">RARG</div>
+    <div class="dt">2026-08 · arXiv:2607.24223v2</div>
+    <div class="ds"><strong>本資料の中心論文。</strong>境界ではなく、関連性で <code>grep</code> の走査順を決める。</div>
+  </div>
+</div>
+<p class="legend-note">以下、本文・図・表には <strong>どの論文の話か</strong>を示すチップを付けています。この4色は資料全体で一貫しています。<span class="chip c-none">本資料</span> は論文の主張ではなく紹介者側の整理・評価を指します。</p>
+
 <nav class="toc">
   <h4>目次</h4>
   <ol>
@@ -569,6 +699,7 @@
 </section>
 
 <h3>1.1　出発点：top-k スニペットという契約</h3>
+<p class="src"><span class="chip c-none">背景</span> 4本すべてが前提とする、従来のインターフェース</p>
 
 <p>RAG、オープンドメイン QA、ReAct 型検索エージェント——すべて同じ契約の上に立っている。</p>
 
@@ -705,14 +836,15 @@
 
 <div class="wrap">
 
-<div class="card">
+<div class="card k-dci">
   <div class="id"><span class="name">DCI</span><span>arXiv:2605.05242</span><span>2026-05</span><span>TAMU / Waterloo / Stanford ほか</span></div>
   <h3>1.2　契約を壊した論文</h3>
+<p class="src"><span class="chip c-dci">DCI 論文</span> 以下の数値・主張はすべて DCI 論文が報告したもの</p>
   <p><strong>Direct Corpus Interaction</strong> は、埋め込みモデル・ベクトルインデックス・検索 API を<strong>全部やめた</strong>。代わりにエージェントに <code>grep</code> / <code>rg</code> / <code>find</code> / <code>read</code> / bash を渡し、生コーパスのファイルシステムを直接叩かせる。</p>
 
   <div class="tablewrap">
     <table>
-      <caption>DCI の主要結果</caption>
+      <caption><span class="chip c-dci">DCI 論文</span>DCI の主要結果</caption>
       <thead><tr><th>ベンチマーク</th><th>結果</th></tr></thead>
       <tbody>
         <tr><td>BrowseComp-Plus（Sonnet 4.6）</td><td class="wrap-ok">69.0% → <span class="win">80.0%</span>（+11.0pt）、コスト $1,440 → $1,016（−29.4%）</td></tr>
@@ -726,11 +858,11 @@
 
   <div class="tablewrap">
     <table>
-      <caption>BrowseComp-Plus 100問サブセット・軌跡分析</caption>
+      <caption><span class="chip c-dci">DCI 論文</span>BrowseComp-Plus 100問サブセット・軌跡分析</caption>
       <thead><tr><th>手法</th><th class="n">Coverage (mean)</th><th class="n">Localization</th><th class="n">Accuracy</th></tr></thead>
       <tbody>
         <tr><td>Qwen3-Embedding-8B</td><td class="n"><span class="win">56.7</span></td><td class="n">21.7</td><td class="n">45</td></tr>
-        <tr class="hi"><td>DCI-Agent-Lite</td><td class="n">28.0</td><td class="n"><span class="win">48.4</span></td><td class="n"><span class="win">73</span></td></tr>
+        <tr class="hi"><td><span class="p p-dci">DCI-Agent-Lite</span></td><td class="n">28.0</td><td class="n"><span class="win">48.4</span></td><td class="n"><span class="win">73</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -738,6 +870,104 @@
   <p><strong>Gold 文書の回収率では埋め込み検索に倍近い差で負けている。</strong>それでも精度は +28pt。</p>
 
   <p>理由：BrowseComp-Plus の質問の Gold 文書は通常 1〜4 件しかない。<em>1 本引き当てさえすれば</em>、そこから正確なスパンを検証し、新しいエンティティを抜き出し、それを次の <code>grep</code> の材料にできる。DCI は「網羅的な証拠回収」を捨てて「<strong>高解像度の局所的な前進</strong>」を買っている。</p>
+
+  
+<div class="tablewrap" style="border:0;background:none;padding:0;overflow-x:auto">
+<figure style="margin:38px 0 34px">
+  <svg viewBox="0 0 900 296" role="img" aria-label="検索エージェントとDCIの探索の違い。検索エージェントは多くのGold文書に届くが各文書の先頭スニペットしか見ない。DCIは1本のGold文書にしか届かないが、その中の正確な一行まで掘り下げ、そこで得たエンティティで次のgrepを組み立てる。" style="min-width:660px">
+    <defs>
+      <marker id="dA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker>
+      <marker id="dB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="f-dci" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+    </defs>
+    <g font-family="ui-monospace, Menlo, monospace" font-size="11" fill="currentColor">
+      <line x1="450" y1="10" x2="450" y2="286" stroke="currentColor" stroke-width="1" opacity="0.18"/>
+
+      <!-- ===== LEFT : retriever ===== -->
+      <text x="30" y="22" font-size="12" font-weight="700">検索エージェント（top-k）</text>
+      <rect x="86" y="36" width="270" height="28" fill="none" stroke="currentColor" stroke-width="1.2"/>
+      <text x="221" y="55" text-anchor="middle">retriever.search("...")</text>
+      <line x1="221" y1="64" x2="221" y2="86" stroke="currentColor" stroke-width="1.3" marker-end="url(#dA)"/>
+
+      <!-- 4 gold docs, 3 reached, shallow -->
+      <g>
+        <rect x="30" y="90" width="82" height="106" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <rect x="30" y="90" width="82" height="20" fill="currentColor" opacity="0.16"/>
+        <text x="71" y="104" text-anchor="middle" font-size="9">snippet</text>
+        <line x1="38" y1="124" x2="104" y2="124" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="38" y1="136" x2="104" y2="136" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="38" y1="148" x2="96" y2="148" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="38" y1="160" x2="104" y2="160" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="38" y1="172" x2="88" y2="172" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="38" y1="184" x2="104" y2="184" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+      </g>
+      <g>
+        <rect x="122" y="90" width="82" height="106" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <rect x="122" y="90" width="82" height="20" fill="currentColor" opacity="0.16"/>
+        <text x="163" y="104" text-anchor="middle" font-size="9">snippet</text>
+        <line x1="130" y1="124" x2="196" y2="124" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="130" y1="136" x2="196" y2="136" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="130" y1="148" x2="188" y2="148" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="130" y1="160" x2="196" y2="160" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="130" y1="172" x2="180" y2="172" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="130" y1="184" x2="196" y2="184" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+      </g>
+      <g>
+        <rect x="214" y="90" width="82" height="106" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <rect x="214" y="90" width="82" height="20" fill="currentColor" opacity="0.16"/>
+        <text x="255" y="104" text-anchor="middle" font-size="9">snippet</text>
+        <line x1="222" y1="124" x2="288" y2="124" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="222" y1="136" x2="288" y2="136" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="222" y1="148" x2="280" y2="148" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="222" y1="160" x2="288" y2="160" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="222" y1="172" x2="272" y2="172" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="222" y1="184" x2="288" y2="184" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+      </g>
+      <g opacity="0.3">
+        <rect x="306" y="90" width="82" height="106" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <text x="347" y="146" text-anchor="middle" font-size="9">未到達</text>
+      </g>
+      <text x="30" y="214" font-size="10" opacity="0.65">Gold 文書には広く届く。ただし各文書は先頭だけ</text>
+      <text x="30" y="240" font-size="11">Coverage <tspan font-weight="700">56.7</tspan>　Localization <tspan font-weight="700">21.7</tspan></text>
+      <text x="30" y="262" font-size="13" font-weight="700">→ Accuracy 45</text>
+
+      <!-- ===== RIGHT : DCI ===== -->
+      <text x="478" y="22" font-size="12" font-weight="700" class="f-dci">DCI（grep で直接叩く）</text>
+      <rect x="534" y="36" width="270" height="28" class="w-dci s-dci" stroke-width="1.3"/>
+      <text x="669" y="55" text-anchor="middle" class="f-dci">grep -n "PATTERN" .</text>
+      <line x1="669" y1="64" x2="669" y2="86" class="s-dci" stroke-width="1.3" marker-end="url(#dB)"/>
+
+      <g opacity="0.3">
+        <rect x="478" y="90" width="82" height="106" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <text x="519" y="146" text-anchor="middle" font-size="9">未到達</text>
+      </g>
+      <g>
+        <rect x="570" y="90" width="112" height="106" fill="none" class="s-dci" stroke-width="1.6"/>
+        <line x1="578" y1="106" x2="674" y2="106" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="578" y1="118" x2="674" y2="118" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="578" y1="130" x2="660" y2="130" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <rect x="574" y="138" width="104" height="14" class="w-dci"/>
+        <line x1="578" y1="145" x2="674" y2="145" class="s-dci" stroke-width="1.6"/>
+        <text x="686" y="149" font-size="9.5" class="f-dci">:2143 の一行</text>
+        <line x1="578" y1="160" x2="674" y2="160" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="578" y1="172" x2="652" y2="172" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+        <line x1="578" y1="184" x2="674" y2="184" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+      </g>
+      <g opacity="0.3">
+        <rect x="722" y="90" width="82" height="106" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <text x="763" y="146" text-anchor="middle" font-size="9">未到達</text>
+      </g>
+
+      <!-- loop back -->
+      <path d="M 570 145 L 552 145 L 552 76 L 534 76" fill="none" class="s-dci" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#dB)"/>
+      <text x="478" y="214" font-size="10" class="f-dci">1本しか届かないが、その中の一行まで掘り、</text>
+      <text x="478" y="228" font-size="10" class="f-dci">そこで得たエンティティで次の grep を組む</text>
+      <text x="478" y="252" font-size="11">Coverage <tspan font-weight="700">28.0</tspan>　Localization <tspan font-weight="700">48.4</tspan></text>
+      <text x="478" y="274" font-size="13" font-weight="700" class="f-dci">→ Accuracy 73</text>
+    </g>
+  </svg>
+  <figcaption><strong>図2：<span class="p p-dci">DCI</span> は「広く浅く」を「狭く深く」に交換している。</strong> 左は Gold 文書に広く届くが、見えるのは各文書の先頭スニペットだけ。右は届く文書が半分以下でも、一致した行の周辺を <code>read</code> で開き、そこで拾ったエンティティで次の <code>grep</code> を組み立てる。この往復が Localization の差（21.7 → 48.4）であり、Coverage で負けたまま精度で +28pt 勝つ理由。</figcaption>
+</figure>
+</div>
 
   <p>著者はこれを <strong>retrieval interface の resolution（解像度）</strong> と呼ぶ。<code>read + grep</code> だけに絞っても 61%（埋め込み検索エージェントは 45%）出る、という結果がこの主張を支えている。</p>
 
@@ -748,9 +978,10 @@
   </div>
 </div>
 
-<div class="card">
+<div class="card k-rise">
   <div class="id"><span class="name">RISE</span><span>arXiv:2606.06880</span><span>2026-06</span><span>Waterloo（Jimmy Lin ら）</span></div>
   <h3>1.3　境界を引く</h3>
+<p class="src"><span class="chip c-rise">RISE 論文</span> 対 DCI の比較値も RISE 論文が報告したもの</p>
   <blockquote><p>検索の仕事は、読む文書を選ぶことではなく、<strong>インタラクション空間</strong>を構築することだ。</p></blockquote>
   <p>インタラクション空間 = <strong>コンテキストウィンドウの外側に存在し、エージェントがシェルツールで反復探索できる、境界付きのコーパス部分集合</strong>。2つの設計帰結を実装する。</p>
   <ol>
@@ -758,10 +989,82 @@
     <li><strong>空間内のオブジェクトを加工しておく</strong> — オフラインで LLM に<strong>行番号付き目次（TOC）とセクションアンカー</strong>を生成させ本文に挿入。要約でもチャンクでもなく、<strong>本文は一切書き換えない</strong>。$0.0014/文書</li>
   </ol>
 
+
+<div class="tablewrap" style="border:0;background:none;padding:0;overflow-x:auto">
+<figure style="margin:38px 0 34px">
+  <svg viewBox="0 0 900 300" role="img" aria-label="RISEの仕組み。BM25が全コーパスからtop-K=1000をワークスペースへハードリンクして境界を作り、その文書には索引時に行番号付き目次が挿入されているため、エージェントはreadのoffsetで本文の該当行へ直接着地できる。" style="min-width:660px">
+    <defs>
+      <marker id="rA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker>
+      <marker id="rB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="f-rise" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+    </defs>
+    <g font-family="ui-monospace, Menlo, monospace" font-size="11" fill="currentColor">
+      <text x="14" y="20" font-size="10" opacity="0.55" class="f-rise">① 検索が境界を作る</text>
+      <text x="472" y="20" font-size="10" opacity="0.55" class="f-rise">② 空間内のオブジェクトを索引時に加工しておく</text>
+      <line x1="14" y1="28" x2="452" y2="28" class="s-rise" stroke-width="1" opacity="0.35"/>
+      <line x1="472" y1="28" x2="886" y2="28" class="s-rise" stroke-width="1" opacity="0.35"/>
+
+      <!-- corpus grid -->
+      <text x="14" y="52" font-size="10" opacity="0.7">コーパス 10万</text>
+      <g opacity="0.35">
+        <rect x="14" y="60" width="10" height="13" fill="none" stroke="currentColor"/><rect x="28" y="60" width="10" height="13" fill="none" stroke="currentColor"/><rect x="42" y="60" width="10" height="13" fill="none" stroke="currentColor"/><rect x="56" y="60" width="10" height="13" fill="none" stroke="currentColor"/><rect x="70" y="60" width="10" height="13" fill="none" stroke="currentColor"/>
+        <rect x="14" y="78" width="10" height="13" fill="none" stroke="currentColor"/><rect x="28" y="78" width="10" height="13" fill="none" stroke="currentColor"/><rect x="42" y="78" width="10" height="13" fill="none" stroke="currentColor"/><rect x="56" y="78" width="10" height="13" fill="none" stroke="currentColor"/><rect x="70" y="78" width="10" height="13" fill="none" stroke="currentColor"/>
+        <rect x="14" y="96" width="10" height="13" fill="none" stroke="currentColor"/><rect x="28" y="96" width="10" height="13" fill="none" stroke="currentColor"/><rect x="42" y="96" width="10" height="13" fill="none" stroke="currentColor"/><rect x="56" y="96" width="10" height="13" fill="none" stroke="currentColor"/><rect x="70" y="96" width="10" height="13" fill="none" stroke="currentColor"/>
+        <rect x="14" y="114" width="10" height="13" fill="none" stroke="currentColor"/><rect x="28" y="114" width="10" height="13" fill="none" stroke="currentColor"/><rect x="42" y="114" width="10" height="13" fill="none" stroke="currentColor"/><rect x="56" y="114" width="10" height="13" fill="none" stroke="currentColor"/><rect x="70" y="114" width="10" height="13" fill="none" stroke="currentColor"/>
+      </g>
+
+      <line x1="94" y1="94" x2="124" y2="94" class="s-rise" stroke-width="1.3" marker-end="url(#rB)"/>
+      <rect x="126" y="76" width="126" height="36" class="w-rise s-rise" stroke-width="1.3"/>
+      <text x="189" y="92" text-anchor="middle" class="f-rise" font-weight="700">BM25</text>
+      <text x="189" y="106" text-anchor="middle" class="f-rise" font-size="9.5">top-K = 1000 / sub-query</text>
+
+      <line x1="252" y1="94" x2="282" y2="94" class="s-rise" stroke-width="1.3" marker-end="url(#rB)"/>
+      <text x="267" y="86" text-anchor="middle" font-size="9" class="f-rise">hardlink</text>
+      <rect x="284" y="52" width="164" height="122" fill="none" class="s-rise" stroke-width="1.6"/>
+      <text x="366" y="70" text-anchor="middle" font-weight="700">ワークスペース</text>
+      <g class="f-rise" opacity="0.85">
+        <rect x="300" y="82" width="30" height="38" fill="none" class="s-rise" stroke-width="1"/>
+        <rect x="338" y="82" width="30" height="38" fill="none" class="s-rise" stroke-width="1"/>
+        <rect x="376" y="82" width="30" height="38" fill="none" class="s-rise" stroke-width="1"/>
+        <rect x="414" y="82" width="20" height="38" fill="none" class="s-rise" stroke-width="1" stroke-dasharray="3 3"/>
+      </g>
+      <text x="366" y="140" text-anchor="middle" font-size="9.5" opacity="0.7">プレビューは上位10件だけ</text>
+      <text x="366" y="156" text-anchor="middle" font-size="9.5" opacity="0.7">残りは bash / read で掘る</text>
+
+      <!-- blown-up file -->
+      <line x1="448" y1="112" x2="480" y2="112" stroke="currentColor" stroke-width="1.3" marker-end="url(#rA)"/>
+      <rect x="486" y="40" width="400" height="200" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text x="498" y="58" font-size="9.5" opacity="0.55">--- title: Our History ---</text>
+      <line x1="486" y1="66" x2="886" y2="66" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+      <text x="498" y="82" class="f-rise" font-weight="700" font-size="10.5">## Table of Contents</text>
+      <text x="498" y="98" font-size="10" opacity="0.75">- L18-23  遺産と最初期の起源</text>
+      <rect x="492" y="104" width="290" height="16" class="w-rise"/>
+      <text x="498" y="116" font-size="10" class="f-rise" font-weight="700">- L24-27  Bath School of Art 時代</text>
+      <text x="498" y="134" font-size="10" opacity="0.75">- L28-31  戦後モダニズムと Corsham Court</text>
+      <text x="498" y="150" font-size="10" opacity="0.4">…</text>
+      <text x="498" y="170" font-size="10" opacity="0.55">=== DOCUMENT BODY ===</text>
+      <line x1="486" y1="178" x2="886" y2="178" stroke="currentColor" stroke-width="1" opacity="0.2"/>
+      <text x="498" y="196" font-size="10" opacity="0.35">L18 …</text>
+      <rect x="492" y="202" width="290" height="16" class="w-rise"/>
+      <text x="498" y="214" font-size="10" class="f-rise" font-weight="700">L24 ## Bath School of Art 時代</text>
+      <text x="498" y="232" font-size="10" opacity="0.35">L28 …</text>
+
+      <path d="M 790 112 L 830 112 L 830 202 L 790 202" fill="none" class="s-rise" stroke-width="1.3" marker-end="url(#rB)"/>
+      <text x="840" y="152" font-size="9.5" class="f-rise">read(offset=23,</text>
+      <text x="840" y="166" font-size="9.5" class="f-rise">     limit=4)</text>
+
+      <line x1="14" y1="258" x2="886" y2="258" stroke="currentColor" stroke-width="1" opacity="0.18"/>
+      <text x="14" y="276" font-size="10" opacity="0.7">目次はオフラインで LLM が生成し、本文は一切書き換えない（要約でもチャンク化でもない）。10万文書で 1件あたり $0.0014。</text>
+      <text x="14" y="292" font-size="10" opacity="0.7">効いているのは主に ①の境界。②の目次は上乗せ +1〜4pt。</text>
+    </g>
+  </svg>
+  <figcaption><strong>図3：<span class="p p-rise">RISE</span> の二段構え。</strong> ①BM25 が top-K=1000 をワークスペースへハードリンクして<strong>境界</strong>を作る（モデルに見せるのは上位10件だけで、残りはシェルで掘らせる）。②その文書には索引時に<strong>行番号付き目次</strong>が挿してあるので、<code>read</code> の <code>offset</code> で本文の該当行へ直接着地できる。</figcaption>
+</figure>
+</div>
+
   <div class="tablewrap">
     <table>
-      <caption>10万文書 / BrowseComp-Plus 100クエリ</caption>
-      <thead><tr><th>モデル</th><th>RISE</th><th>DCI</th></tr></thead>
+      <caption><span class="chip c-rise">RISE 論文</span>10万文書 / BrowseComp-Plus 100クエリ</caption>
+      <thead><tr><th>モデル</th><th><span class="p p-rise">RISE</span></th><th><span class="p p-dci">DCI</span></th></tr></thead>
       <tbody>
         <tr><td>gpt-5.4-mini</td><td><span class="win">78% / $0.28</span></td><td>78% / <span class="win">$1.10</span></td></tr>
         <tr><td>mimo-v2.5-pro</td><td><span class="win">78%</span></td><td>60%</td></tr>
@@ -772,19 +1075,79 @@
   <p><strong>同じ精度を約1/4のコストで。</strong>100万文書へ10倍しても RISE-BM25 は 77%→81% と劣化しない（DCI+nano は 71%→60%、実時間切れ 7→33件）。なお効いているのは主に <strong>境界</strong>の方で、TOC は +1〜4pt の上乗せ。</p>
 </div>
 
-<div class="card">
+<div class="card k-drdci">
   <div class="id"><span class="name">DR-DCI</span><span>arXiv:2606.14885</span><span>2026-06</span><span>Toronto / TAMU / Waterloo — DCI と同じ著者陣</span></div>
   <h3>1.4　境界を動的にする</h3>
+<p class="src"><span class="chip c-drdci">DR-DCI 論文</span> Raw DCI との比較値も DR-DCI 論文が報告したもの</p>
   <p>RISE の空間が<strong>静的</strong>なのに対し、検索を <code>pull(query, topK)</code> という<strong>エージェントが任意のタイミングで呼べるワークスペース拡張アクション</strong>にした。証拠の制約が変わるたびに空間を育てる。</p>
+
+
+<div class="tablewrap" style="border:0;background:none;padding:0;overflow-x:auto">
+<figure style="margin:38px 0 34px">
+  <svg viewBox="0 0 900 288" role="img" aria-label="DR-DCIの仕組み。pullは前処理ではなく推論中に何度でも呼べるアクションで、証拠の制約が変わるたびにワークスペースが段階的に成長する。静的な一回のpullより高精度で、文書間の横断検索を禁じると精度が半減する。" style="min-width:660px">
+    <defs>
+      <marker id="wA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker>
+      <marker id="wB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="f-drdci" d="M 0 0 L 10 5 L 0 10 z"/></marker>
+    </defs>
+    <g font-family="ui-monospace, Menlo, monospace" font-size="11" fill="currentColor">
+      <text x="14" y="20" font-size="10" opacity="0.55" class="f-drdci">推論しながらワークスペースを育てる</text>
+      <line x1="14" y1="28" x2="886" y2="28" class="s-drdci" stroke-width="1" opacity="0.35"/>
+
+      <!-- action row -->
+      <rect x="20" y="44" width="150" height="30" class="w-drdci s-drdci" stroke-width="1.3"/>
+      <text x="95" y="63" text-anchor="middle" class="f-drdci">pull("q1", 500)</text>
+      <line x1="170" y1="59" x2="204" y2="59" stroke="currentColor" stroke-width="1.2" marker-end="url(#wA)"/>
+      <rect x="206" y="44" width="164" height="30" fill="none" stroke="currentColor" stroke-width="1.2"/>
+      <text x="288" y="63" text-anchor="middle">rg / grep 文書間検索</text>
+      <line x1="370" y1="59" x2="404" y2="59" stroke="currentColor" stroke-width="1.2" marker-end="url(#wA)"/>
+      <rect x="406" y="44" width="164" height="30" fill="none" stroke="currentColor" stroke-width="1.2"/>
+      <text x="488" y="63" text-anchor="middle" font-size="10">橋渡しエンティティを発見</text>
+      <line x1="570" y1="59" x2="604" y2="59" class="s-drdci" stroke-width="1.2" marker-end="url(#wB)"/>
+      <rect x="606" y="44" width="150" height="30" class="w-drdci s-drdci" stroke-width="1.3"/>
+      <text x="681" y="63" text-anchor="middle" class="f-drdci">pull("q2", 400)</text>
+      <line x1="756" y1="59" x2="790" y2="59" stroke="currentColor" stroke-width="1.2" marker-end="url(#wA)"/>
+      <rect x="792" y="44" width="94" height="30" fill="none" stroke="currentColor" stroke-width="1.2"/>
+      <text x="839" y="63" text-anchor="middle">回答</text>
+
+      <!-- drop lines -->
+      <line x1="95" y1="74" x2="95" y2="122" class="s-drdci" stroke-width="1.1" stroke-dasharray="3 3"/>
+      <line x1="681" y1="74" x2="681" y2="122" class="s-drdci" stroke-width="1.1" stroke-dasharray="3 3"/>
+
+      <!-- workspace growth -->
+      <text x="14" y="106" font-size="10" opacity="0.6">ワークスペース</text>
+      <line x1="20" y1="196" x2="886" y2="196" stroke="currentColor" stroke-width="1.2"/>
+      <rect x="20" y="166" width="290" height="30" class="w-drdci s-drdci" stroke-width="1.4"/>
+      <text x="165" y="186" text-anchor="middle" font-size="10" class="f-drdci">約 500 文書</text>
+      <rect x="310" y="146" width="260" height="50" class="w-drdci s-drdci" stroke-width="1.4"/>
+      <text x="440" y="176" text-anchor="middle" font-size="10" class="f-drdci">横断検索の対象はこの範囲</text>
+      <rect x="570" y="126" width="316" height="70" class="w-drdci s-drdci" stroke-width="1.4"/>
+      <text x="728" y="166" text-anchor="middle" font-size="10" class="f-drdci">約 900 文書 — 1,000〜1,400 に収束</text>
+      <text x="20" y="214" font-size="9.5" opacity="0.6">制約が変わるたびに拡張。コーパスが 100倍でもワークスペースは有界に保たれる</text>
+
+      <!-- comparison strip -->
+      <line x1="14" y1="234" x2="886" y2="234" stroke="currentColor" stroke-width="1" opacity="0.18"/>
+      <text x="14" y="252" font-size="10" opacity="0.6">アブレーション（BCP-100）</text>
+      <rect x="176" y="240" width="180" height="24" fill="none" stroke="currentColor" stroke-width="1.1"/>
+      <text x="266" y="256" text-anchor="middle" font-size="10">静的 Single Pull … 79</text>
+      <rect x="368" y="240" width="180" height="24" class="w-drdci s-drdci" stroke-width="1.3"/>
+      <text x="458" y="256" text-anchor="middle" font-size="10" class="f-drdci">Dynamic Pull … 82</text>
+      <rect x="560" y="240" width="230" height="24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="4 3"/>
+      <text x="675" y="256" text-anchor="middle" font-size="10" opacity="0.75">文書間 DCI を禁止 … 40</text>
+      <text x="14" y="282" font-size="9.5" opacity="0.6">横断検索を封じると精度が半減し、pull 回数は 3.49 → 20.50 に暴騰する。「上位を順に読むエージェント」ではない。</text>
+    </g>
+  </svg>
+  <figcaption><strong>図4：<span class="p p-drdci">DR-DCI</span> の <code>pull</code> は前処理ではなくアクション。</strong> 証拠の制約が変わるたびに呼ばれ、ワークスペースが段階的に育つ（コーパスが100倍でも 1,000〜1,400 文書に収まる）。下段が要点で、<strong>文書間の横断検索を封じると 82 → 40 に半減する</strong>——本体は pull ではなく、育てた空間の中での比較・検証のほうにある。</figcaption>
+</figure>
+</div>
 
   <div class="tablewrap">
     <table>
-      <caption>BrowseComp-Plus 830問</caption>
+      <caption><span class="chip c-drdci">DR-DCI 論文</span>BrowseComp-Plus 830問</caption>
       <thead><tr><th>手法</th><th class="n">精度</th><th class="n">実時間</th><th class="n">コスト</th></tr></thead>
       <tbody>
-        <tr><td>Raw DCI</td><td class="n">62.90%</td><td class="n">3139秒</td><td class="n">$88.13</td></tr>
-        <tr class="hi"><td>DR-DCI</td><td class="n"><span class="win">71.20%</span></td><td class="n"><span class="win">146秒</span></td><td class="n"><span class="win">$34.91</span></td></tr>
-        <tr class="hi"><td>+ ワークスペース保持コンテキストリセット</td><td class="n"><span class="win">73.25%</span></td><td class="n">176秒</td><td class="n">$39.35</td></tr>
+        <tr><td><span class="p p-dci">Raw DCI</span></td><td class="n">62.90%</td><td class="n">3139秒</td><td class="n">$88.13</td></tr>
+        <tr class="hi"><td><span class="p p-drdci">DR-DCI</span></td><td class="n"><span class="win">71.20%</span></td><td class="n"><span class="win">146秒</span></td><td class="n"><span class="win">$34.91</span></td></tr>
+        <tr class="hi"><td><span class="p p-drdci">DR-DCI</span> + ワークスペース保持コンテキストリセット</td><td class="n"><span class="win">73.25%</span></td><td class="n">176秒</td><td class="n">$39.35</td></tr>
       </tbody>
     </table>
   </div>
@@ -798,6 +1161,7 @@
 </div>
 
 <h3>1.5　3本に共通する、見落とされていたこと</h3>
+<p class="src"><span class="chip c-rarg">RARG 論文</span> ここは <span class="p p-rarg">RARG</span> による他3本への批判であって、3本の自己申告ではない</p>
 
 <p>RISE も DR-DCI も、確かに DCI のスケール問題を解いた。だが RARG はこう指摘する。</p>
 
@@ -819,6 +1183,7 @@
 </section>
 
 <h3>2.1　中心主張</h3>
+<p class="src"><span class="chip c-rarg">RARG 論文</span> 以下 Part II はすべて RARG 論文の内容</p>
 
 <blockquote>
   <p>関連性は、コーパスへの入力を選ぶだけでなく、<strong>コーパスとの相互作用そのものを導くべきである。</strong></p>
@@ -925,7 +1290,7 @@
     </g>
   </svg>
   </div>
-  <figcaption><strong>図2：RARG の二つの関連性注入点。</strong> 上段——<code>embed_recall</code> は<strong>文書の中身を一切返さず</strong>、ランク付きのパス一覧だけを一時ファイルに書く。それが <code>rg</code> の走査順になる（<code>-j1</code> はパス順が並列実行で壊れるのを防ぐため）。下段——ヒットは 500 件のプールから埋め込みで再ランクされ、上位 30 件だけがコンテキストに届く。この二段目がないと、<strong>順位の低い文書に埋もれた決定的な抜粋は切り詰めで消える</strong>。</figcaption>
+  <figcaption><strong>図5：<span class="p p-rarg">RARG</span> の二つの関連性注入点。</strong> 上段——<code>embed_recall</code> は<strong>文書の中身を一切返さず</strong>、ランク付きのパス一覧だけを一時ファイルに書く。それが <code>rg</code> の走査順になる（<code>-j1</code> はパス順が並列実行で壊れるのを防ぐため）。下段——ヒットは 500 件のプールから埋め込みで再ランクされ、上位 30 件だけがコンテキストに届く。この二段目がないと、<strong>順位の低い文書に埋もれた決定的な抜粋は切り詰めで消える</strong>。</figcaption>
 </figure>
 </div>
 
@@ -1015,40 +1380,43 @@
 </section>
 
 <h3>3.1　主結果：BrowseComp-Plus 10万文書・100クエリ</h3>
+<p class="src"><span class="chip c-rarg">RARG 論文</span> Part III の数値はすべて RARG 論文の報告値。他手法の値も RARG 側の再実験または引用</p>
 </div>
 
 <div class="wide">
 <div class="tablewrap">
   <table>
-    <caption>表1 — BrowseComp-Plus (100K docs / 100 queries)</caption>
+    <caption><span class="chip c-rarg">RARG 論文</span>表1 — BrowseComp-Plus (100K docs / 100 queries)</caption>
     <thead>
       <tr><th>手法</th><th class="n">Acc ↑</th><th class="n">Turns</th><th class="n">Tools ↓</th><th class="n">Search</th><th class="n">Bash</th><th class="n">Read</th></tr>
     </thead>
     <tbody>
       <tr class="grp"><td colspan="7">GPT-5.4-mini（medium effort）</td></tr>
-      <tr><td>DCI</td><td class="n">78</td><td class="n">48.8</td><td class="n">99.1</td><td class="n">–</td><td class="n">90.3</td><td class="n">8.8</td></tr>
-      <tr><td>RISE</td><td class="n">78</td><td class="n">24.3</td><td class="n">28.7</td><td class="n">13.1</td><td class="n">9.2</td><td class="n">6.4</td></tr>
-      <tr><td>RISE-BM25</td><td class="n">77</td><td class="n">23.0</td><td class="n">29.6</td><td class="n">14.8</td><td class="n">9.6</td><td class="n">5.2</td></tr>
-      <tr><td>RISE-Q3-Emb-4B</td><td class="n">69</td><td class="n">28.9</td><td class="n">35.9</td><td class="n">22.1</td><td class="n">9.1</td><td class="n">4.7</td></tr>
+      <tr><td><span class="p p-dci">DCI</span></td><td class="n">78</td><td class="n">48.8</td><td class="n">99.1</td><td class="n">–</td><td class="n">90.3</td><td class="n">8.8</td></tr>
+      <tr><td><span class="p p-rise">RISE</span></td><td class="n">78</td><td class="n">24.3</td><td class="n">28.7</td><td class="n">13.1</td><td class="n">9.2</td><td class="n">6.4</td></tr>
+      <tr><td><span class="p p-rise">RISE-BM25</span></td><td class="n">77</td><td class="n">23.0</td><td class="n">29.6</td><td class="n">14.8</td><td class="n">9.6</td><td class="n">5.2</td></tr>
+      <tr><td><span class="p p-rise">RISE-Q3-Emb-4B</span></td><td class="n">69</td><td class="n">28.9</td><td class="n">35.9</td><td class="n">22.1</td><td class="n">9.1</td><td class="n">4.7</td></tr>
       <tr><td>Retrieval Agent</td><td class="n">68</td><td class="n">29.2</td><td class="n">38.9</td><td class="n">37.0</td><td class="n">–</td><td class="n">1.9</td></tr>
       <tr><td>NeMo Agent</td><td class="n">64</td><td class="n">25.3</td><td class="n">30.3</td><td class="n">28.2</td><td class="n">–</td><td class="n">–</td></tr>
       <tr><td>Embedding Agent</td><td class="n">55</td><td class="n">54.3</td><td class="n">68.0</td><td class="n">68.0</td><td class="n">–</td><td class="n">–</td></tr>
-      <tr><td>RARG</td><td class="n">80</td><td class="n">18.2</td><td class="n">29.8</td><td class="n"><span class="win">1.2</span></td><td class="n">27.2</td><td class="n">1.4</td></tr>
-      <tr><td>RARG+</td><td class="n">81</td><td class="n">20.2</td><td class="n">29.6</td><td class="n">1.6</td><td class="n">26.6</td><td class="n">1.3</td></tr>
-      <tr class="hi"><td>RARG++</td><td class="n"><span class="win">84</span></td><td class="n"><span class="win">17.6</span></td><td class="n"><span class="win">23.9</span></td><td class="n">1.5</td><td class="n">21.1</td><td class="n">1.3</td></tr>
+      <tr><td><span class="p p-rarg">RARG</span></td><td class="n">80</td><td class="n">18.2</td><td class="n">29.8</td><td class="n"><span class="win">1.2</span></td><td class="n">27.2</td><td class="n">1.4</td></tr>
+      <tr><td><span class="p p-rarg">RARG+</span></td><td class="n">81</td><td class="n">20.2</td><td class="n">29.6</td><td class="n">1.6</td><td class="n">26.6</td><td class="n">1.3</td></tr>
+      <tr class="hi"><td><span class="p p-rarg">RARG++</span></td><td class="n"><span class="win">84</span></td><td class="n"><span class="win">17.6</span></td><td class="n"><span class="win">23.9</span></td><td class="n">1.5</td><td class="n">21.1</td><td class="n">1.3</td></tr>
       <tr class="grp"><td colspan="7">GPT-5.4-nano（high effort）</td></tr>
-      <tr><td>DCI</td><td class="n">71</td><td class="n">45.7</td><td class="n">126.5</td><td class="n">–</td><td class="n">119.4</td><td class="n">7.1</td></tr>
-      <tr><td>RISE</td><td class="n">68</td><td class="n">23.4</td><td class="n">28.7</td><td class="n">10.4</td><td class="n">8.4</td><td class="n">4.6</td></tr>
-      <tr class="hi"><td>RARG++</td><td class="n"><span class="win">79</span></td><td class="n">36.0</td><td class="n">36.1</td><td class="n">9.6</td><td class="n">23.4</td><td class="n">3.1</td></tr>
+      <tr><td><span class="p p-dci">DCI</span></td><td class="n">71</td><td class="n">45.7</td><td class="n">126.5</td><td class="n">–</td><td class="n">119.4</td><td class="n">7.1</td></tr>
+      <tr><td><span class="p p-rise">RISE</span></td><td class="n">68</td><td class="n">23.4</td><td class="n">28.7</td><td class="n">10.4</td><td class="n">8.4</td><td class="n">4.6</td></tr>
+      <tr class="hi"><td><span class="p p-rarg">RARG++</span></td><td class="n"><span class="win">79</span></td><td class="n">36.0</td><td class="n">36.1</td><td class="n">9.6</td><td class="n">23.4</td><td class="n">3.1</td></tr>
       <tr class="grp"><td colspan="7">GPT-5.4（medium effort）</td></tr>
-      <tr><td>RISE</td><td class="n">82</td><td class="n">32.20</td><td class="n">34.30</td><td class="n">11.00</td><td class="n">16.20</td><td class="n">7.10</td></tr>
-      <tr class="hi"><td>RARG++</td><td class="n"><span class="win">91</span></td><td class="n"><span class="win">13.59</span></td><td class="n"><span class="win">25.43</span></td><td class="n">1.58</td><td class="n">19.46</td><td class="n">4.39</td></tr>
+      <tr><td><span class="p p-rise">RISE</span></td><td class="n">82</td><td class="n">32.20</td><td class="n">34.30</td><td class="n">11.00</td><td class="n">16.20</td><td class="n">7.10</td></tr>
+      <tr class="hi"><td><span class="p p-rarg">RARG++</span></td><td class="n"><span class="win">91</span></td><td class="n"><span class="win">13.59</span></td><td class="n"><span class="win">25.43</span></td><td class="n">1.58</td><td class="n">19.46</td><td class="n">4.39</td></tr>
     </tbody>
   </table>
 </div>
 </div>
 
 <div class="wrap">
+
+<p class="src" style="margin-top:14px"><span class="chip c-rarg">RARG 論文</span> <span class="p p-rise">RISE</span> / <span class="p p-rise">RISE-BM25</span> / <span class="p p-dci">DCI</span> の値は RISE 論文からの引用（原論文では △ で表記）。<span class="p p-rise">RISE-Q3-Emb-4B</span> は RARG 側が用意した対照実験、NeMo Agent は公式実装で実行したもの。</p>
 
 <h4>読みどころ</h4>
 
@@ -1074,13 +1442,13 @@ nano : RARG 73 → RARG+ 74 → RARG++ 79</code></pre>
 
 <div class="tablewrap">
   <table>
-    <caption>表2 — GPT-5.4-mini / スケーリング</caption>
+    <caption><span class="chip c-rarg">RARG 論文</span>表2 — GPT-5.4-mini / スケーリング</caption>
     <thead><tr><th>手法</th><th class="n">10万</th><th class="n">100万</th><th class="n">差</th></tr></thead>
     <tbody>
-      <tr><td>RISE-BM25</td><td class="n">77</td><td class="n">69</td><td class="n">−8</td></tr>
-      <tr><td>RARG</td><td class="n">80</td><td class="n">78</td><td class="n">−2</td></tr>
-      <tr><td>RARG+</td><td class="n">81</td><td class="n">78</td><td class="n">−3</td></tr>
-      <tr class="hi"><td>RARG++</td><td class="n"><span class="win">84</span></td><td class="n"><span class="win">79</span></td><td class="n">−5</td></tr>
+      <tr><td><span class="p p-rise">RISE-BM25</span></td><td class="n">77</td><td class="n">69</td><td class="n">−8</td></tr>
+      <tr><td><span class="p p-rarg">RARG</span></td><td class="n">80</td><td class="n">78</td><td class="n">−2</td></tr>
+      <tr><td><span class="p p-rarg">RARG+</span></td><td class="n">81</td><td class="n">78</td><td class="n">−3</td></tr>
+      <tr class="hi"><td><span class="p p-rarg">RARG++</span></td><td class="n"><span class="win">84</span></td><td class="n"><span class="win">79</span></td><td class="n">−5</td></tr>
     </tbody>
   </table>
 </div>
@@ -1099,15 +1467,15 @@ nano : RARG 73 → RARG+ 74 → RARG++ 79</code></pre>
 <div class="wide">
 <div class="tablewrap">
   <table>
-    <caption>表3 — BRIGHT / nDCG@10（GPT-5.4-mini）</caption>
+    <caption><span class="chip c-rarg">RARG 論文</span>表3 — BRIGHT / nDCG@10（GPT-5.4-mini）</caption>
     <thead><tr><th>手法</th><th class="n">Avg ↑</th><th class="n">Bio</th><th class="n">Earth</th><th class="n">Eco</th><th class="n">Robot</th><th class="n">Tools</th></tr></thead>
     <tbody>
-      <tr><td>RISE-BM25</td><td class="n">41.60</td><td class="n">50.27</td><td class="n">47.80</td><td class="n">33.65</td><td class="n">34.67</td><td class="n">31.82</td></tr>
-      <tr><td>DCI</td><td class="n">48.43</td><td class="n">62.05</td><td class="n">54.94</td><td class="n">37.13</td><td class="n">39.59</td><td class="n">40.04</td></tr>
-      <tr><td>RARG++</td><td class="n">50.55</td><td class="n">61.65</td><td class="n">61.32</td><td class="n">36.14</td><td class="n">43.10</td><td class="n">27.28</td></tr>
-      <tr><td>RARG</td><td class="n">51.75</td><td class="n">63.87</td><td class="n">60.54</td><td class="n">38.50</td><td class="n">44.07</td><td class="n">28.73</td></tr>
+      <tr><td><span class="p p-rise">RISE-BM25</span></td><td class="n">41.60</td><td class="n">50.27</td><td class="n">47.80</td><td class="n">33.65</td><td class="n">34.67</td><td class="n">31.82</td></tr>
+      <tr><td><span class="p p-dci">DCI</span></td><td class="n">48.43</td><td class="n">62.05</td><td class="n">54.94</td><td class="n">37.13</td><td class="n">39.59</td><td class="n">40.04</td></tr>
+      <tr><td><span class="p p-rarg">RARG++</span></td><td class="n">50.55</td><td class="n">61.65</td><td class="n">61.32</td><td class="n">36.14</td><td class="n">43.10</td><td class="n">27.28</td></tr>
+      <tr><td><span class="p p-rarg">RARG</span></td><td class="n">51.75</td><td class="n">63.87</td><td class="n">60.54</td><td class="n">38.50</td><td class="n">44.07</td><td class="n">28.73</td></tr>
       <tr><td>NeMo Agent</td><td class="n">52.89</td><td class="n">65.15</td><td class="n">61.85</td><td class="n"><span class="win">39.05</span></td><td class="n">45.49</td><td class="n"><span class="win">7.68</span></td></tr>
-      <tr class="hi"><td>RARG+</td><td class="n"><span class="win">53.36</span></td><td class="n"><span class="win">66.70</span></td><td class="n"><span class="win">62.16</span></td><td class="n">37.23</td><td class="n"><span class="win">47.34</span></td><td class="n">27.55</td></tr>
+      <tr class="hi"><td><span class="p p-rarg">RARG+</span></td><td class="n"><span class="win">53.36</span></td><td class="n"><span class="win">66.70</span></td><td class="n"><span class="win">62.16</span></td><td class="n">37.23</td><td class="n"><span class="win">47.34</span></td><td class="n">27.55</td></tr>
     </tbody>
   </table>
 </div>
@@ -1133,10 +1501,10 @@ nano : RARG 73 → RARG+ 74 → RARG++ 79</code></pre>
     <thead><tr><th>エージェント</th><th>プロファイル</th><th>解釈</th></tr></thead>
     <tbody>
       <tr><td>Embedding Agent</td><td class="wrap-ok">上位に鋭く集中、ただし<strong>総ヒット数が少ない</strong></td><td class="wrap-ok">top-k が冗長な文書を返し、同じ情報に観測予算を浪費</td></tr>
-      <tr><td>NeMo</td><td class="wrap-ok">重複除去でより多様、だが<strong>関連性＝コンテンツ</strong>の枠内</td><td class="wrap-ok">インターフェースの制約は同じ</td></tr>
-      <tr><td>DCI</td><td class="wrap-ok"><strong>最も平坦</strong>、スコープ外も大量にヒット</td><td class="wrap-ok">順序の事前知識がなく全体を舐める → 証拠密度が低く収束が遅い</td></tr>
-      <tr class="hi"><td>RARG</td><td class="wrap-ok">上位に偏りつつ、Embedding Agent より<strong>多様な文書</strong>を回収</td><td class="wrap-ok">文書レベル関連性が走査を主導している</td></tr>
-      <tr class="hi"><td>RARG++</td><td class="wrap-ok">3変種中<strong>最も平坦</strong>、下位ランクからも回収</td><td class="wrap-ok">マッチレベル再ランクが、低スコア文書に埋もれた抜粋を引き上げている</td></tr>
+      <tr><td>NeMo Agent</td><td class="wrap-ok">重複除去でより多様、だが<strong>関連性＝コンテンツ</strong>の枠内</td><td class="wrap-ok">インターフェースの制約は同じ</td></tr>
+      <tr><td><span class="p p-dci">DCI</span></td><td class="wrap-ok"><strong>最も平坦</strong>、スコープ外も大量にヒット</td><td class="wrap-ok">順序の事前知識がなく全体を舐める → 証拠密度が低く収束が遅い</td></tr>
+      <tr class="hi"><td><span class="p p-rarg">RARG</span></td><td class="wrap-ok">上位に偏りつつ、Embedding Agent より<strong>多様な文書</strong>を回収</td><td class="wrap-ok">文書レベル関連性が走査を主導している</td></tr>
+      <tr class="hi"><td><span class="p p-rarg">RARG++</span></td><td class="wrap-ok">3変種中<strong>最も平坦</strong>、下位ランクからも回収</td><td class="wrap-ok">マッチレベル再ランクが、低スコア文書に埋もれた抜粋を引き上げている</td></tr>
     </tbody>
   </table>
 </div>
@@ -1157,6 +1525,7 @@ nano : RARG 73 → RARG+ 74 → RARG++ 79</code></pre>
 </section>
 
 <h3>4.1　良いところ</h3>
+<p class="src"><span class="chip c-none">本資料</span> ここから 4.2 までは論文の主張ではなく、紹介者の評価</p>
 
 <ol>
   <li><strong>主張と実装が一対一に対応している。</strong>「大域関連性＝走査順」「局所関連性＝可視性」の2軸が、そのまま <code>-j1</code> 逐次走査とマッチ再ランクという2つの実装になり、そのままアブレーション（RARG / + / ++）になり、そのままヒット分布の図で検証されている。<em>論文としての骨格が非常にきれい。</em></li>
@@ -1166,6 +1535,7 @@ nano : RARG 73 → RARG+ 74 → RARG++ 79</code></pre>
 </ol>
 
 <h3>4.2　気になるところ・突っ込みどころ</h3>
+<p class="src"><span class="chip c-none">本資料</span></p>
 
 <div class="tablewrap">
   <table>
@@ -1181,18 +1551,19 @@ nano : RARG 73 → RARG+ 74 → RARG++ 79</code></pre>
 </div>
 
 <h3>4.3　位置づけまとめ</h3>
+<p class="src"><span class="chip c-none">本資料</span> 4本を横断して整理したもの</p>
 </div>
 
 <div class="wide">
 <div class="tablewrap">
   <table>
-    <caption>4本の設計空間</caption>
+    <caption><span class="chip c-none">本資料</span>4本の設計空間</caption>
     <thead><tr><th></th><th>候補集合の境界</th><th>空間内オブジェクト</th><th>関連性の役割</th><th>検証したスケール</th></tr></thead>
     <tbody>
-      <tr><th>DCI</th><td>なし（コーパス全体）</td><td>生テキスト</td><td><strong>使わない</strong></td><td>20万で崩壊開始</td></tr>
-      <tr><th>RISE</th><td>静的（BM25 top-K）</td><td><strong>TOC 挿入済</strong></td><td>空間の構築</td><td>100万で安定</td></tr>
-      <tr><th>DR-DCI</th><td><strong>動的</strong>（<code>pull</code> で拡張）</td><td>生テキスト</td><td>空間の構築・拡張</td><td>1,000万〜2,000万</td></tr>
-      <tr class="hi"><th>RARG</th><td>実質なし（<strong>順序付け</strong>）</td><td>生テキスト</td><td><strong>走査順＋観測可視性</strong></td><td>100万で緩やかに低下</td></tr>
+      <tr><th><span class="p p-dci">DCI</span></th><td>なし（コーパス全体）</td><td>生テキスト</td><td><strong>使わない</strong></td><td>20万で崩壊開始</td></tr>
+      <tr><th><span class="p p-rise">RISE</span></th><td>静的（BM25 top-K）</td><td><strong>TOC 挿入済</strong></td><td>空間の構築</td><td>100万で安定</td></tr>
+      <tr><th><span class="p p-drdci">DR-DCI</span></th><td><strong>動的</strong>（<code>pull</code> で拡張）</td><td>生テキスト</td><td>空間の構築・拡張</td><td>1,000万〜2,000万</td></tr>
+      <tr class="hi"><th><span class="p p-rarg">RARG</span></th><td>実質なし（<strong>順序付け</strong>）</td><td>生テキスト</td><td><strong>走査順＋観測可視性</strong></td><td>100万で緩やかに低下</td></tr>
     </tbody>
   </table>
 </div>
@@ -1212,6 +1583,8 @@ nano : RARG 73 → RARG+ 74 → RARG++ 79</code></pre>
   <div class="kicker">Part V</div>
   <h2>想定質疑</h2>
 </section>
+
+<p class="src"><span class="chip c-none">本資料</span> 発表時に出そうな質問と、論文から返せる答え</p>
 
 
 <div class="qa">
