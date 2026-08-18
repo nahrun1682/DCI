@@ -550,7 +550,7 @@
     <li><a href="#part2"><span class="n">II</span><span>RARG 本体 — 二つの解像度の関連性</span></a></li>
     <li><a href="#part3"><span class="n">III</span><span>実験結果</span></a></li>
     <li><a href="#part4"><span class="n">IV</span><span>評価 — 良いところと突っ込みどころ</span></a></li>
-    <li><a href="#part5"><span class="n">V</span><span>発表用の流れと想定質疑</span></a></li>
+    <li><a href="#part5"><span class="n">V</span><span>想定質疑</span></a></li>
   </ol>
 </nav>
 
@@ -1210,31 +1210,9 @@ nano : RARG 73 → RARG+ 74 → RARG++ 79</code></pre>
 <!-- ============ PART V ============ -->
 <section class="part" id="part5">
   <div class="kicker">Part V</div>
-  <h2>発表用の流れ</h2>
+  <h2>想定質疑</h2>
 </section>
 
-<h3>30分版</h3>
-
-<div class="tablewrap">
-  <table>
-    <thead><tr><th class="n">時間</th><th>内容</th></tr></thead>
-    <tbody>
-      <tr><td class="n">0–3分</td><td class="wrap-ok">top-k スニペット契約と、その構造的欠陥（関連性 ≠ 有用性）</td></tr>
-      <tr class="hi"><td class="n">3–8分</td><td class="wrap-ok"><strong>DCI</strong>：検索器を捨てる。<strong>カバレッジで負けて精度で勝つ表を必ず見せる</strong>（ここが一番効く）</td></tr>
-      <tr><td class="n">8–11分</td><td class="wrap-ok">DCI の宿題：10万→40万で 37.5% に崩壊。全走査は構造的コスト</td></tr>
-      <tr><td class="n">11–15分</td><td class="wrap-ok"><strong>RISE</strong>（境界を引く）と <strong>DR-DCI</strong>（境界を育てる）を並べて2分ずつ</td></tr>
-      <tr class="hi"><td class="n">15–17分</td><td class="wrap-ok"><strong>3本の共通の見落とし</strong>：関連性は空間を作るためにしか使われていない ← <strong>ここが転換点</strong></td></tr>
-      <tr><td class="n">17–25分</td><td class="wrap-ok"><strong>RARG 本体</strong>：大域／局所の2解像度 → <code>embed_recall</code> + <code>-j1</code> → 初期化 → マッチ再ランク</td></tr>
-      <tr><td class="n">25–30分</td><td class="wrap-ok">結果（84% / 91%、Search 1.2回）、BRIGHT の逆転、RISE との矛盾、限界</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<h3>10分版</h3>
-
-<p>DCI の「カバレッジ 28 vs 56.7 なのに精度 +28pt」→「でも40万文書で崩壊」→「RISE / DR-DCI は境界で解いた」→「でも関連性は探索の実行を導いていない」→ RARG の2解像度 → 84% / 23.9ツール。</p>
-
-<h3>想定質疑</h3>
 
 <div class="qa">
   <p class="q">結局これは BM25 で絞ってから grep するのと何が違うのか？</p>
